@@ -1,0 +1,14 @@
+{
+  "name": "petodo-swagger",
+  "version": "0.1.0",
+  "description": "Swagger UI плагины для Tampermonkey",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
