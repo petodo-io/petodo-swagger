@@ -1,5 +1,9 @@
 # Petodo Swagger Plugins
 
+[![Install with Tampermonkey](https://img.shields.io/badge/Install-Tampermonkey-blue)](https://www.tampermonkey.net/?ext=dhdg&browser=chrome&url=https://raw.githubusercontent.com/petodo-io/petodo-swagger/main/dist/petodo-swagger.user.js)
+
+**Installation:** [Download userscript](https://raw.githubusercontent.com/petodo-io/petodo-swagger/main/dist/petodo-swagger.user.js) or install via [Tampermonkey](https://www.tampermonkey.net/?ext=dhdg&browser=chrome&url=https://raw.githubusercontent.com/petodo-io/petodo-swagger/main/dist/petodo-swagger.user.js)
+
 **Endpoint Copy Button**
 
 Modes:
