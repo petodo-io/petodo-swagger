@@ -1,6 +1,6 @@
 # Petodo Swagger Plugins
 
-Endpoint Copy Button
+**Endpoint Copy Button**
 
 Modes:
 
@@ -10,17 +10,17 @@ Modes:
 
 ![img.png](src/img/img.png)
 
-Favorites: Mark popular endpoints with a star and display only favorites with a filter.
+**Favorites:** Mark popular endpoints with a star and display only favorites with a filter.
 
 ![img_1.png](src/img/img_1.png)
 
 ![img_2.png](src/img/img_2.png)
 
-Search: Filter by method type and path.
+**Search:** Filter by method type and path.
 
 ![img_3.png](src/img/img_3.png)
 
-JSON Validation: Highlights JSON errors in the request body. Highlights and annotates type errors in JSON body fields.
+**JSON Validation:** Highlights JSON errors in the request body. Highlights and annotates type errors in JSON body fields.
 
 ![img_4.png](src/img/img_4.png)
 
@@ -30,3 +30,13 @@ Other improvements:
 
 - Schemas block is collapsed by default on first page load.
 - Remembers expanded/collapsed state of Swagger sections.
+
+For development:
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
