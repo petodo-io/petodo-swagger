@@ -37,6 +37,10 @@ Modes:
 
 ![img_5.png](src/img/img_5.png)
 
+Request timings: last, min, max, average
+
+![img_6.png](src/img/img_6.png)
+
 Other improvements:
 
 - Schemas block is collapsed by default on first page load.

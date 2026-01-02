@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Petodo Swagger Plugins
 // @namespace    https://github.com/petodo-io
-// @version      0.1.0
+// @version      0.1.1
 // @description  Plugins for improving Swagger UI: copy compact format, favorites endpoints, search
 // @author       Petodo
 // @match        *://*/*
@@ -13,7 +13,7 @@
 
 (function() {
   "use strict";
-  const petodoCss = '/* ===== Notifications ===== */\n\n:root {\n  --petodo-primary-color: #8d9297;\n}\n\n.petodo-notification {\n  position: fixed;\n  top: 20px;\n  right: 20px;\n  color: white;\n  padding: 12px 24px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);\n  z-index: 10000;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 14px;\n  animation: slideIn 0.3s ease-out;\n}\n\n.petodo-notification.petodo-notification-success {\n  background: #4caf50;\n}\n\n.petodo-notification.petodo-notification-error {\n  background: #f44336;\n}\n\n@keyframes slideIn {\n  from {\n    transform: translateX(100%);\n    opacity: 0;\n  }\n  to {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOut {\n  from {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  to {\n    transform: translateX(100%);\n    opacity: 0;\n  }\n}\n\n/* ===== Copy compact menu ===== */\n.copy-compact-container {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  position: relative;\n}\n\n.copy-compact-btn {\n  padding: 6px;\n  background: transparent;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 28px;\n  height: 28px;\n  flex-shrink: 0;\n}\n\n.copy-compact-btn svg {\n  color: var(--petodo-primary-color);\n  transition: color 0.15s;\n}\n\n.copy-compact-btn:hover svg {\n  color: #7a746c;\n}\n\n.copy-compact-expand-btn {\n  padding: 0;\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 12px;\n  height: 28px;\n}\n\n.copy-compact-expand-btn svg {\n  color: var(--petodo-primary-color);\n  fill: currentColor;\n}\n\n.copy-compact-expand-btn:hover {\n  background: #0000000f;\n}\n\n.copy-compact-expand-btn:hover svg {\n  color: #7a746c;\n}\n\n.copy-compact-expand-btn.is-open {\n  transform: rotate(180deg);\n}\n\n.copy-compact-dropdown {\n  position: absolute;\n  top: 100%;\n  right: 0;\n  margin-top: 4px;\n  background: white;\n  border: 1px solid #d0d7de;\n  border-radius: 6px;\n  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);\n  z-index: 1000;\n  min-width: 280px;\n  display: block;\n  padding: 4px;\n}\n\n.copy-mode-item {\n  display: flex;\n  align-items: center;\n  padding: 8px 12px;\n  cursor: pointer;\n  border-radius: 4px;\n  transition: background 0.15s;\n}\n\n.copy-mode-item:hover {\n  background: #f6f8fa;\n}\n\n.copy-mode-label {\n  flex: 1;\n  font-size: 14px;\n  color: #24292f;\n}\n\n.copy-mode-radio {\n  margin-left: 12px;\n  cursor: pointer;\n}\n\n/* ===== Favorites endpoints ===== */\n.auth-wrapper {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: 1 !important;\n}\n.opblock-summary {\n  position: relative;\n}\n\n.favorite-star-container {\n  position: absolute;\n  top: 0;\n  left: -24px;\n  display: flex;\n  align-items: center;\n  width: 40px;\n  height: 40px;\n  cursor: default;\n}\n\n@media (max-width: 1500px) {\n  .favorite-star-container {\n    left: -20px;\n  }\n}\n\n.favorite-star-btn {\n  display: none;\n  padding: 2px;\n  background: transparent;\n  border: none;\n  border-radius: 4px;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  color: var(--petodo-primary-color);\n  fill: var(--petodo-primary-color);\n}\n\n.favorite-star-container.favorite-visible .favorite-star-btn {\n  display: flex;\n}\n\n.opblock-summary:hover .favorite-star-btn {\n  display: flex;\n}\n\n.favorite-star-btn:hover {\n  background: rgba(0, 0, 0, 0.05);\n}\n\n.favorite-star-btn svg {\n  user-select: none;\n}\n\n.favorite-star-btn:hover svg {\n  transform: scale(1.1);\n}\n\n.favorite-star-btn.favorite-active svg {\n  color: #ffc107 !important;\n  fill: #ffc107 !important;\n}\n\n/* Favorites filter button */\n.favorites-filter-btn {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  padding: 8px 16px;\n  margin-right: 8px;\n  background: transparent;\n  border: 1px solid #d0d7de;\n  border-radius: 4px;\n  cursor: pointer;\n  transition: all 0.15s;\n  font-size: 14px;\n  color: #24292f;\n}\n\n.favorites-filter-btn:hover {\n  background: #f6f8fa;\n  border-color: #8c959f;\n}\n\n.favorites-filter-btn.active {\n  background: #fff3cd;\n  border-color: #ffc107;\n}\n\n.favorites-filter-btn.active:hover {\n  background: #ffe69c;\n  border-color: #ffc107;\n}\n\n.favorites-filter-btn svg {\n  transition: fill 0.15s;\n}\n\n.favorites-filter-btn.active svg {\n  fill: #ffc107 !important;\n}\n\n/* ===== Search endpoints ===== */\n.wrapper.swagger-search-wrapper {\n  margin: 0;\n  padding: 0;\n  margin-right: auto;\n}\n\n.swagger-search-inner-wrapper {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n}\n\n.swagger-search-input {\n  position: relative;\n  z-index: 2;\n  background: transparent !important;\n  border: 1px solid #d0d7de;\n  border-radius: 4px;\n  padding: 8px 32px 8px 12px !important;\n  font-size: 14px !important;\n  max-width: none;\n  width: 100%;\n  height: 34px;\n  outline: none;\n  margin: 0 !important;\n  line-height: 1;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;\n  color: transparent;\n  caret-color: #24292f;\n  transition: border-color 0.15s;\n}\n\n.swagger-search-input:focus {\n  border-color: #0969da;\n  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);\n}\n\n.swagger-search-input::placeholder {\n  color: #8c959f;\n}\n\n.swagger-search-inner-wrapper pre {\n  position: absolute;\n  left: 0;\n  top: 0;\n  margin: 0;\n  padding: 8px 32px 8px 12px !important;\n  white-space: pre-wrap;\n  word-wrap: break-word;\n  color: #24292f;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;\n  font-size: 14px !important;\n  line-height: 1;\n  pointer-events: none;\n  z-index: 1;\n  border: 1px solid transparent;\n  border-radius: 4px;\n  height: 34px;\n  width: 100%;\n  box-sizing: border-box;\n  overflow: hidden;\n  background: white;\n}\n\n.swagger-search-clear-btn {\n  position: absolute;\n  right: 8px;\n  top: 50%;\n  transform: translateY(-50%);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  z-index: 3;\n  padding: 0;\n  border-radius: 4px;\n  transition: background-color 0.15s;\n}\n\n.swagger-search-clear-btn:hover {\n  background-color: rgba(0, 0, 0, 0.05);\n}\n\n.swagger-search-clear-btn svg {\n  color: #8c959f;\n  transition: color 0.15s;\n}\n\n.swagger-search-clear-btn:hover svg {\n  color: #24292f;\n}\n\n/* JSON Validation Overlay */\n.json-validation-wrapper {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n}\n\n.json-validation-overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  pointer-events: none;\n  overflow: hidden;\n  white-space: pre-wrap;\n  word-wrap: break-word;\n  color: transparent;\n  z-index: 2;\n  background: transparent;\n  border: none;\n  box-sizing: border-box;\n  margin: 5px 0;\n  padding: 10px;\n  outline: none;\n  font-family: monospace;\n  font-size: 12px;\n  font-weight: 600;\n  line-height: 13.8px;\n}\n\n.json-validation-highlight {\n  background-color: rgba(244, 67, 54, 0.2);\n  border-bottom: 2px solid #f44336;\n}\n\n.json-validation-schema-highlight {\n  background-color: rgba(255, 152, 0, 0.2);\n  border-bottom: 2px solid #ff9800;\n}\n\n.json-validation-wrapper textarea {\n  position: relative;\n  z-index: 1;\n  max-width: 100%;\n  font-family: monospace;\n  border: none !important;\n}\n.json-validation-wrapper textarea:focus {\n  box-shadow: 0 0 0 2px #61affe;\n}\n\n.json-validation-error {\n  margin-top: 8px;\n  padding: 12px;\n  background-color: #ffebee;\n  border: 1px solid #f44336;\n  border-radius: 4px;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 13px;\n  line-height: 1.5;\n}\n\n.json-validation-error-message {\n  color: #d32f2f;\n  word-break: break-word;\n}\n\n.json-validation-schema-error {\n  margin-top: 8px;\n  padding: 12px;\n  background-color: #fff3cd;\n  border: 1px solid #ff9800;\n  border-radius: 4px;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 13px;\n  line-height: 1.5;\n}\n\n.json-validation-error-list {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n}\n\n.json-validation-error-item {\n  display: flex;\n  flex-direction: column;\n  line-height: 1.2;\n}\n\n.json-validation-error-path {\n  font-weight: 600;\n  color: #c62828;\n  font-family: monospace;\n  font-size: 12px;\n}\n\n.json-validation-error-text {\n  color: #d32f2f;\n  word-break: break-word;\n}\n\n/* Schema error specific styles */\n.json-validation-schema-error .json-validation-error-path {\n  color: #e65100;\n}\n\n.json-validation-schema-error .json-validation-error-text {\n  color: #f57c00;\n}\n\n/* ===== JSON Validation ===== */\n.json-validation-error-input {\n  background-color: #ffebee !important;\n  box-shadow: 0 0 0 2px #f44336 !important;\n}\n\n.json-validation-schema-error-input {\n  box-shadow: 0 0 0 2px #ff9800 !important;\n}\n\n.json-validation-schema-error-input:focus {\n  box-shadow: 0 0 0 2px #ff9800, 0 0 0 5px rgba(255, 152, 0, 0.1) !important;\n}\n';
+  const petodoCss = '/* ===== Notifications ===== */\n\n:root {\n  --petodo-primary-color: #8d9297;\n}\n\n.petodo-notification {\n  position: fixed;\n  top: 20px;\n  right: 20px;\n  color: white;\n  padding: 12px 24px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);\n  z-index: 10000;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 14px;\n  animation: slideIn 0.3s ease-out;\n}\n\n.petodo-notification.petodo-notification-success {\n  background: #4caf50;\n}\n\n.petodo-notification.petodo-notification-error {\n  background: #f44336;\n}\n\n@keyframes slideIn {\n  from {\n    transform: translateX(100%);\n    opacity: 0;\n  }\n  to {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOut {\n  from {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  to {\n    transform: translateX(100%);\n    opacity: 0;\n  }\n}\n\n/* ===== Copy compact menu ===== */\n.copy-compact-container {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  position: relative;\n}\n\n.copy-compact-btn {\n  padding: 6px;\n  background: transparent;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 28px;\n  height: 28px;\n  flex-shrink: 0;\n}\n\n.copy-compact-btn svg {\n  color: var(--petodo-primary-color);\n  transition: color 0.15s;\n}\n\n.copy-compact-btn:hover svg {\n  color: #7a746c;\n}\n\n.copy-compact-expand-btn {\n  padding: 0;\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 12px;\n  height: 28px;\n}\n\n.copy-compact-expand-btn svg {\n  color: var(--petodo-primary-color);\n  fill: currentColor;\n}\n\n.copy-compact-expand-btn:hover {\n  background: #0000000f;\n}\n\n.copy-compact-expand-btn:hover svg {\n  color: #7a746c;\n}\n\n.copy-compact-expand-btn.is-open {\n  transform: rotate(180deg);\n}\n\n.copy-compact-dropdown {\n  position: absolute;\n  top: 100%;\n  right: 0;\n  margin-top: 4px;\n  background: white;\n  border: 1px solid #d0d7de;\n  border-radius: 6px;\n  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);\n  z-index: 1000;\n  min-width: 280px;\n  display: block;\n  padding: 4px;\n}\n\n.copy-mode-item {\n  display: flex;\n  align-items: center;\n  padding: 8px 12px;\n  cursor: pointer;\n  border-radius: 4px;\n  transition: background 0.15s;\n}\n\n.copy-mode-item:hover {\n  background: #f6f8fa;\n}\n\n.copy-mode-label {\n  flex: 1;\n  font-size: 14px;\n  color: #24292f;\n}\n\n.copy-mode-radio {\n  margin-left: 12px;\n  cursor: pointer;\n}\n\n/* ===== Favorites endpoints ===== */\n.auth-wrapper {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: 1 !important;\n}\n.opblock-summary {\n  position: relative;\n}\n\n.favorite-star-container {\n  position: absolute;\n  top: 0;\n  left: -24px;\n  display: flex;\n  align-items: center;\n  width: 40px;\n  height: 40px;\n  cursor: default;\n}\n\n@media (max-width: 1500px) {\n  .favorite-star-container {\n    left: -20px;\n  }\n}\n\n.favorite-star-btn {\n  display: none;\n  padding: 2px;\n  background: transparent;\n  border: none;\n  border-radius: 4px;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  color: var(--petodo-primary-color);\n  fill: var(--petodo-primary-color);\n}\n\n.favorite-star-container.favorite-visible .favorite-star-btn {\n  display: flex;\n}\n\n.opblock-summary:hover .favorite-star-btn {\n  display: flex;\n}\n\n.favorite-star-btn:hover {\n  background: rgba(0, 0, 0, 0.05);\n}\n\n.favorite-star-btn svg {\n  user-select: none;\n}\n\n.favorite-star-btn:hover svg {\n  transform: scale(1.1);\n}\n\n.favorite-star-btn.favorite-active svg {\n  color: #ffc107 !important;\n  fill: #ffc107 !important;\n}\n\n/* Favorites filter button */\n.favorites-filter-btn {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  padding: 8px 16px;\n  margin-right: 8px;\n  background: transparent;\n  border: 1px solid #d0d7de;\n  border-radius: 4px;\n  cursor: pointer;\n  transition: all 0.15s;\n  font-size: 14px;\n  color: #24292f;\n}\n\n.favorites-filter-btn:hover {\n  background: #f6f8fa;\n  border-color: #8c959f;\n}\n\n.favorites-filter-btn.active {\n  background: #fff3cd;\n  border-color: #ffc107;\n}\n\n.favorites-filter-btn.active:hover {\n  background: #ffe69c;\n  border-color: #ffc107;\n}\n\n.favorites-filter-btn svg {\n  transition: fill 0.15s;\n}\n\n.favorites-filter-btn.active svg {\n  fill: #ffc107 !important;\n}\n\n/* ===== Search endpoints ===== */\n.wrapper.swagger-search-wrapper {\n  margin: 0;\n  padding: 0;\n  margin-right: auto;\n}\n\n.swagger-search-inner-wrapper {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n}\n\n.swagger-search-input {\n  position: relative;\n  z-index: 2;\n  background: transparent !important;\n  border: 1px solid #d0d7de;\n  border-radius: 4px;\n  padding: 8px 32px 8px 12px !important;\n  font-size: 14px !important;\n  max-width: none;\n  width: 100%;\n  height: 34px;\n  outline: none;\n  margin: 0 !important;\n  line-height: 1;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;\n  color: transparent;\n  caret-color: #24292f;\n  transition: border-color 0.15s;\n}\n\n.swagger-search-input:focus {\n  border-color: #0969da;\n  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);\n}\n\n.swagger-search-input::placeholder {\n  color: #8c959f;\n}\n\n.swagger-search-inner-wrapper pre {\n  position: absolute;\n  left: 0;\n  top: 0;\n  margin: 0;\n  padding: 8px 32px 8px 12px !important;\n  white-space: pre-wrap;\n  word-wrap: break-word;\n  color: #24292f;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;\n  font-size: 14px !important;\n  line-height: 1;\n  pointer-events: none;\n  z-index: 1;\n  border: 1px solid transparent;\n  border-radius: 4px;\n  height: 34px;\n  width: 100%;\n  box-sizing: border-box;\n  overflow: hidden;\n  background: white;\n}\n\n.swagger-search-clear-btn {\n  position: absolute;\n  right: 8px;\n  top: 50%;\n  transform: translateY(-50%);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  z-index: 3;\n  padding: 0;\n  border-radius: 4px;\n  transition: background-color 0.15s;\n}\n\n.swagger-search-clear-btn:hover {\n  background-color: rgba(0, 0, 0, 0.05);\n}\n\n.swagger-search-clear-btn svg {\n  color: #8c959f;\n  transition: color 0.15s;\n}\n\n.swagger-search-clear-btn:hover svg {\n  color: #24292f;\n}\n\n/* JSON Validation Overlay */\n.json-validation-wrapper {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n}\n\n.json-validation-overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  pointer-events: none;\n  overflow: hidden;\n  white-space: pre-wrap;\n  word-wrap: break-word;\n  color: transparent;\n  z-index: 2;\n  background: transparent;\n  border: none;\n  box-sizing: border-box;\n  margin: 5px 0;\n  padding: 10px;\n  outline: none;\n  font-family: monospace;\n  font-size: 12px;\n  font-weight: 600;\n  line-height: 13.8px;\n}\n\n.json-validation-highlight {\n  background-color: rgba(244, 67, 54, 0.2);\n  border-bottom: 2px solid #f44336;\n}\n\n.json-validation-schema-highlight {\n  background-color: rgba(255, 152, 0, 0.2);\n  border-bottom: 2px solid #ff9800;\n}\n\n.json-validation-wrapper textarea {\n  position: relative;\n  z-index: 1;\n  max-width: 100%;\n  font-family: monospace;\n  border: none !important;\n}\n.json-validation-wrapper textarea:focus {\n  box-shadow: 0 0 0 2px #61affe;\n}\n\n.json-validation-error {\n  margin-top: 8px;\n  padding: 12px;\n  background-color: #ffebee;\n  border: 1px solid #f44336;\n  border-radius: 4px;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 13px;\n  line-height: 1.5;\n}\n\n.json-validation-error-message {\n  color: #d32f2f;\n  word-break: break-word;\n}\n\n.json-validation-schema-error {\n  margin-top: 8px;\n  padding: 12px;\n  background-color: #fff3cd;\n  border: 1px solid #ff9800;\n  border-radius: 4px;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  font-size: 13px;\n  line-height: 1.5;\n}\n\n.json-validation-error-list {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n}\n\n.json-validation-error-item {\n  display: flex;\n  flex-direction: column;\n  line-height: 1.2;\n}\n\n.json-validation-error-path {\n  font-weight: 600;\n  color: #c62828;\n  font-family: monospace;\n  font-size: 12px;\n}\n\n.json-validation-error-text {\n  color: #d32f2f;\n  word-break: break-word;\n}\n\n/* Schema error specific styles */\n.json-validation-schema-error .json-validation-error-path {\n  color: #e65100;\n}\n\n.json-validation-schema-error .json-validation-error-text {\n  color: #f57c00;\n}\n\n/* ===== JSON Validation ===== */\n.json-validation-error-input {\n  background-color: #ffebee !important;\n  box-shadow: 0 0 0 2px #f44336 !important;\n}\n\n.json-validation-schema-error-input {\n  box-shadow: 0 0 0 2px #ff9800 !important;\n}\n\n.json-validation-schema-error-input:focus {\n  box-shadow: 0 0 0 2px #ff9800, 0 0 0 5px rgba(255, 152, 0, 0.1) !important;\n}\n\n/* ===== Request Timing Analytics ===== */\n.request-timing-analytics {\n  display: flex;\n  align-items: stretch;\n  gap: 8px;\n}\n\n.request-timing-analytics-column {\n  display: flex;\n  flex-direction: column;\n  flex: 1;\n  min-height: 0;\n}\n\n.request-timing-analytics-column h5 {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n  height: 18px;\n  font-size: 13px;\n  font-weight: 600;\n  color: #3b4151;\n  margin: 0 0 8px 0;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  flex-shrink: 0;\n}\n\n.request-timing-clear-btn {\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 1 !important;\n  color: #8c959f;\n  background: transparent;\n  border: 1px solid #d0d7de;\n  border-radius: 3px;\n  padding: 2px 8px;\n  cursor: pointer;\n  transition: all 0.15s;\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n  flex-shrink: 0;\n}\n\n.request-timing-clear-btn:hover {\n  color: #24292f;\n  background: #fff;\n  border-color: #8c959f;\n}\n.request-timing-clear-btn:active {\n  background: #f6f8fa;\n}\n\n.request-timing-analytics-column pre.microlight {\n  margin: 0;\n  padding: 0.5em;\n  background: rgb(51, 51, 51);\n  color: white;\n  border-radius: 4px;\n  font-size: 12px;\n  line-height: 1.5;\n  flex: 1;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  white-space: normal;\n}\n\n.request-timing-analytics .headerline {\n  display: block;\n  color: rgb(162, 252, 162);\n  font-family: monospace;\n  white-space: normal;\n  word-break: break-word;\n  margin-bottom: 2px;\n}\n\n.request-timing-analytics span {\n  display: inherit;\n}\n\n.request-timing-analytics .headerline:last-child {\n  margin-bottom: 0;\n}\n';
   (function() {
     const STORAGE_PREFIX = "petodo-swagger-";
     window.getStorageItem = function(key, defaultValue = null) {
@@ -2139,6 +2139,425 @@ ${responseExample}`;
       name: "json-validation"
     };
   })();
+  (function() {
+    const STORAGE_KEY = "request-timing-stats";
+    const activeRequests = /* @__PURE__ */ new Map();
+    function getEndpointId(url, method) {
+      try {
+        const urlObj = new URL(url);
+        const path = urlObj.pathname;
+        return `${method.toUpperCase()}_${path}`;
+      } catch (e) {
+        return `${method.toUpperCase()}_${url}`;
+      }
+    }
+    function getEndpointStats(endpointId) {
+      const allStats = window.getStorageItem(STORAGE_KEY, {});
+      return allStats[endpointId] || {
+        requests: [],
+        min: null,
+        max: null,
+        avg: null,
+        last: null
+      };
+    }
+    function clearEndpointStats(endpointId) {
+      const allStats = window.getStorageItem(STORAGE_KEY, {});
+      if (allStats[endpointId]) {
+        delete allStats[endpointId];
+        window.setStorageItem(STORAGE_KEY, allStats);
+      }
+    }
+    function saveEndpointStats(endpointId, timingData) {
+      const allStats = window.getStorageItem(STORAGE_KEY, {});
+      let stats = allStats[endpointId] || { requests: [] };
+      stats.requests.push(timingData);
+      if (stats.requests.length > 100) {
+        stats.requests = stats.requests.slice(-100);
+      }
+      const durations = stats.requests.map((r) => r.totalTime).filter((t) => t > 0);
+      const dnsTimes = stats.requests.map((r) => r.dnsTime).filter((t) => t > 0);
+      const tcpTimes = stats.requests.map((r) => r.tcpTime).filter((t) => t > 0);
+      const tlsTimes = stats.requests.map((r) => r.tlsTime).filter((t) => t > 0);
+      const requestTimes = stats.requests.map((r) => r.requestTime).filter((t) => t > 0);
+      const responseTimes = stats.requests.map((r) => r.responseTime).filter((t) => t > 0);
+      const avg = (arr) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+      stats.last = timingData;
+      stats.min = {
+        totalTime: durations.length > 0 ? Math.min(...durations) : null,
+        dnsTime: dnsTimes.length > 0 ? Math.min(...dnsTimes) : null,
+        tcpTime: tcpTimes.length > 0 ? Math.min(...tcpTimes) : null,
+        tlsTime: tlsTimes.length > 0 ? Math.min(...tlsTimes) : null,
+        requestTime: requestTimes.length > 0 ? Math.min(...requestTimes) : null,
+        responseTime: responseTimes.length > 0 ? Math.min(...responseTimes) : null
+      };
+      stats.max = {
+        totalTime: durations.length > 0 ? Math.max(...durations) : null,
+        dnsTime: dnsTimes.length > 0 ? Math.max(...dnsTimes) : null,
+        tcpTime: tcpTimes.length > 0 ? Math.max(...tcpTimes) : null,
+        tlsTime: tlsTimes.length > 0 ? Math.max(...tlsTimes) : null,
+        requestTime: requestTimes.length > 0 ? Math.max(...requestTimes) : null,
+        responseTime: responseTimes.length > 0 ? Math.max(...responseTimes) : null
+      };
+      stats.avg = {
+        totalTime: avg(durations),
+        dnsTime: avg(dnsTimes),
+        tcpTime: avg(tcpTimes),
+        tlsTime: avg(tlsTimes),
+        requestTime: avg(requestTimes),
+        responseTime: avg(responseTimes)
+      };
+      allStats[endpointId] = stats;
+      window.setStorageItem(STORAGE_KEY, allStats);
+      return stats;
+    }
+    function getPerformanceTiming(url) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const entries = performance.getEntriesByType("resource");
+          const sortedEntries = entries.filter((e) => e instanceof PerformanceResourceTiming).sort((a, b) => b.startTime - a.startTime);
+          let entry = null;
+          try {
+            const urlObj = new URL(url);
+            entry = sortedEntries.find((e) => {
+              try {
+                const eUrl = new URL(e.name);
+                return eUrl.pathname === urlObj.pathname && eUrl.hostname === urlObj.hostname && (eUrl.port === urlObj.port || !eUrl.port && !urlObj.port);
+              } catch {
+                return false;
+              }
+            });
+            if (!entry) {
+              entry = sortedEntries.find((e) => {
+                try {
+                  const eUrl = new URL(e.name);
+                  return eUrl.pathname === urlObj.pathname;
+                } catch {
+                  return e.name.includes(urlObj.pathname);
+                }
+              });
+            }
+          } catch (e) {
+            entry = sortedEntries.find(
+              (e2) => e2.name === url || e2.name.includes(url)
+            );
+          }
+          if (entry && entry instanceof PerformanceResourceTiming) {
+            const timing = {
+              dnsTime: Math.max(
+                0,
+                entry.domainLookupEnd - entry.domainLookupStart
+              ),
+              tcpTime: Math.max(0, entry.connectEnd - entry.connectStart),
+              tlsTime: entry.secureConnectionStart > 0 ? Math.max(0, entry.connectEnd - entry.secureConnectionStart) : 0,
+              requestTime: Math.max(0, entry.responseStart - entry.requestStart),
+              responseTime: Math.max(0, entry.responseEnd - entry.responseStart),
+              totalTime: Math.max(0, entry.responseEnd - entry.fetchStart),
+              transferSize: entry.transferSize || 0,
+              encodedBodySize: entry.encodedBodySize || 0,
+              decodedBodySize: entry.decodedBodySize || 0
+            };
+            resolve(timing);
+          } else {
+            resolve(null);
+          }
+        }, 200);
+      });
+    }
+    function interceptFetch() {
+      const originalFetch = window.fetch;
+      window.fetch = async function(...args) {
+        var _a;
+        const url = typeof args[0] === "string" ? args[0] : args[0].url;
+        const method = ((_a = args[1]) == null ? void 0 : _a.method) || "GET";
+        if (url.includes("swagger.json") || url.includes("openapi.json")) {
+          return originalFetch.apply(this, args);
+        }
+        const requestId = `${method}_${url}_${Date.now()}`;
+        const startTime = performance.now();
+        activeRequests.set(requestId, {
+          url,
+          method,
+          startTime,
+          requestId
+        });
+        try {
+          const response = await originalFetch.apply(this, args);
+          const endTime = performance.now();
+          const duration = Math.round(endTime - startTime);
+          const status = response.status;
+          const contentType = response.headers.get("content-type") || "";
+          const perfTiming = await getPerformanceTiming(url);
+          const timingData = perfTiming || {
+            dnsTime: 0,
+            tcpTime: 0,
+            tlsTime: 0,
+            requestTime: 0,
+            responseTime: duration,
+            totalTime: duration,
+            transferSize: 0,
+            encodedBodySize: 0,
+            decodedBodySize: 0
+          };
+          const endpointId = getEndpointId(url, method);
+          const stats = saveEndpointStats(endpointId, timingData);
+          const requestInfo = activeRequests.get(requestId);
+          if (requestInfo) {
+            requestInfo.endTime = endTime;
+            requestInfo.duration = duration;
+            requestInfo.status = status;
+            requestInfo.contentType = contentType;
+            requestInfo.timingData = timingData;
+            requestInfo.stats = stats;
+            requestInfo.endpointId = endpointId;
+            displayRequestAnalytics(requestInfo);
+          }
+          return response;
+        } catch (error) {
+          const endTime = performance.now();
+          const duration = Math.round(endTime - startTime);
+          const requestInfo = activeRequests.get(requestId);
+          if (requestInfo) {
+            requestInfo.endTime = endTime;
+            requestInfo.duration = duration;
+            requestInfo.error = error.message;
+            displayRequestAnalytics(requestInfo);
+          }
+          throw error;
+        } finally {
+          setTimeout(() => {
+            activeRequests.delete(requestId);
+          }, 5e3);
+        }
+      };
+    }
+    function formatDuration(ms) {
+      if (ms === null || ms === void 0 || ms < 0) return "N/A";
+      if (ms < 1) return `${ms.toFixed(1)} ms`;
+      if (ms < 1e3) return `${Math.round(ms)} ms`;
+      return `${(ms / 1e3).toFixed(2)} с`;
+    }
+    function formatTimingData(data) {
+      if (!data) return "<span>N/A</span>";
+      const parts = [];
+      const titles = {
+        responseTime: "Time to load the response body (from first to last byte)",
+        dnsTime: "Time for DNS name resolution to IP address",
+        tcpTime: "Time to establish TCP connection (handshake)",
+        tlsTime: "Time for TLS/SSL handshake for HTTPS connection",
+        requestTime: "Time from starting the request to receiving the first byte of the response (TTFB)",
+        totalTime: "Total request time from start to complete finish"
+      };
+      if (data.dnsTime !== null && data.dnsTime !== void 0 && data.dnsTime > 0) {
+        parts.push(
+          `<span title="${titles.dnsTime}">DNS Lookup: <span class="headerline">${formatDuration(
+            data.dnsTime
+          )}</span></span>`
+        );
+      }
+      if (data.tcpTime !== null && data.tcpTime !== void 0 && data.tcpTime > 0) {
+        parts.push(
+          `<span title="${titles.tcpTime}">TCP Connection: <span class="headerline">${formatDuration(
+            data.tcpTime
+          )}</span></span>`
+        );
+      }
+      if (data.tlsTime !== null && data.tlsTime !== void 0 && data.tlsTime > 0) {
+        parts.push(
+          `<span title="${titles.tlsTime}">TLS Handshake: <span class="headerline">${formatDuration(
+            data.tlsTime
+          )}</span></span>`
+        );
+      }
+      if (data.requestTime !== null && data.requestTime !== void 0 && data.requestTime > 0) {
+        parts.push(
+          `<span title="${titles.requestTime}">Request (TTFB): <span class="headerline">${formatDuration(
+            data.requestTime
+          )}</span></span>`
+        );
+      }
+      if (data.responseTime !== null && data.responseTime !== void 0) {
+        parts.push(
+          `<span title="${titles.responseTime}">Response (Data Transfer): <span class="headerline">${formatDuration(
+            data.responseTime
+          )}</span></span>`
+        );
+      }
+      if (data.totalTime !== null && data.totalTime !== void 0) {
+        parts.push(
+          `<span title="${titles.totalTime}">Total Time: <span class="headerline">${formatDuration(
+            data.totalTime
+          )}</span></span>`
+        );
+      }
+      return parts.length > 0 ? parts.join("\n") : "<span>N/A</span>";
+    }
+    function formatMinAvgMax(minData, avgData, maxData) {
+      if (!minData || !avgData || !maxData) return "<span>N/A</span>";
+      const parts = [];
+      const titles = {
+        responseTime: "Time to load the response body (from first to last byte)",
+        dnsTime: "Time for DNS name resolution to IP address",
+        tcpTime: "Time to establish TCP connection (handshake)",
+        tlsTime: "Time for TLS/SSL handshake for HTTPS connection",
+        requestTime: "Time from starting the request to receiving the first byte of the response (TTFB)",
+        totalTime: "Total request time from start to complete finish"
+      };
+      if (minData.dnsTime !== null && minData.dnsTime !== void 0 && minData.dnsTime > 0) {
+        parts.push(
+          `<span title="${titles.dnsTime}">DNS Lookup: <span class="headerline">${formatDuration(
+            minData.dnsTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.dnsTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.dnsTime
+          )}</span></span>`
+        );
+      }
+      if (minData.tcpTime !== null && minData.tcpTime !== void 0 && minData.tcpTime > 0) {
+        parts.push(
+          `<span title="${titles.tcpTime}">TCP Connection: <span class="headerline">${formatDuration(
+            minData.tcpTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.tcpTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.tcpTime
+          )}</span></span>`
+        );
+      }
+      if (minData.tlsTime !== null && minData.tlsTime !== void 0 && minData.tlsTime > 0) {
+        parts.push(
+          `<span title="${titles.tlsTime}">TLS Handshake: <span class="headerline">${formatDuration(
+            minData.tlsTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.tlsTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.tlsTime
+          )}</span></span>`
+        );
+      }
+      if (minData.requestTime !== null && minData.requestTime !== void 0 && minData.requestTime > 0) {
+        parts.push(
+          `<span title="${titles.requestTime}">Request (TTFB): <span class="headerline">${formatDuration(
+            minData.requestTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.requestTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.requestTime
+          )}</span></span>`
+        );
+      }
+      if (minData.responseTime !== null && minData.responseTime !== void 0) {
+        parts.push(
+          `<span title="${titles.responseTime}">Response (Data Transfer): <span class="headerline">${formatDuration(
+            minData.responseTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.responseTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.responseTime
+          )}</span></span>`
+        );
+      }
+      if (minData.totalTime !== null && minData.totalTime !== void 0) {
+        parts.push(
+          `<span title="${titles.totalTime}">Total Time: <span class="headerline">${formatDuration(
+            minData.totalTime
+          )}</span> / <span class="headerline">${formatDuration(
+            avgData.totalTime
+          )}</span> / <span class="headerline">${formatDuration(
+            maxData.totalTime
+          )}</span></span>`
+        );
+      }
+      return parts.length > 0 ? parts.join("\n") : "<span>N/A</span>";
+    }
+    function displayRequestAnalytics(requestInfo) {
+      let attempts = 0;
+      const maxAttempts = 10;
+      const delay = 100;
+      function tryDisplay() {
+        attempts++;
+        const activeOperation = document.querySelector(".opblock.is-open");
+        if (!activeOperation) {
+          if (attempts < maxAttempts) {
+            setTimeout(tryDisplay, delay);
+          }
+          return;
+        }
+        const responsesTable = activeOperation.querySelector(
+          "table.responses-table.live-responses-table"
+        );
+        if (!responsesTable) {
+          if (attempts < maxAttempts) {
+            setTimeout(tryDisplay, delay);
+          }
+          return;
+        }
+        const responseCol = responsesTable.querySelector(
+          "tbody td.response-col_description"
+        );
+        if (!responseCol) {
+          if (attempts < maxAttempts) {
+            setTimeout(tryDisplay, delay);
+          }
+          return;
+        }
+        let analyticsBlock = responseCol.querySelector(
+          ".request-timing-analytics"
+        );
+        if (!analyticsBlock) {
+          analyticsBlock = document.createElement("div");
+          analyticsBlock.className = "request-timing-analytics";
+          const lastDiv = responseCol.querySelector("div:last-of-type");
+          if (lastDiv) {
+            responseCol.insertBefore(analyticsBlock, lastDiv.nextSibling);
+          } else {
+            responseCol.appendChild(analyticsBlock);
+          }
+        }
+        const stats = requestInfo.stats || getEndpointStats(requestInfo.endpointId);
+        const endpointId = requestInfo.endpointId;
+        let html = `
+        <div class="request-timing-analytics-column">
+          <h5>Last Request</h5>
+          <pre class="microlight">
+${formatTimingData(stats.last)}
+          </pre>
+        </div>
+        <div class="request-timing-analytics-column">
+          <h5>Min / Average / Max <button class="request-timing-clear-btn" data-endpoint-id="${endpointId}" title="Clear analytics for this endpoint">Clear</button></h5>
+          <pre class="microlight">
+${formatMinAvgMax(stats.min, stats.avg, stats.max)}
+          </pre>
+        </div>
+      `;
+        analyticsBlock.innerHTML = html;
+        const clearButtons = analyticsBlock.querySelectorAll(
+          ".request-timing-clear-btn"
+        );
+        clearButtons.forEach((button) => {
+          button.addEventListener("click", function(e) {
+            e.stopPropagation();
+            const endpointIdToClear = button.getAttribute("data-endpoint-id");
+            if (endpointIdToClear) {
+              clearEndpointStats(endpointIdToClear);
+              if (analyticsBlock && analyticsBlock.parentNode) {
+                analyticsBlock.parentNode.removeChild(analyticsBlock);
+              }
+            }
+          });
+        });
+      }
+      setTimeout(tryDisplay, 100);
+    }
+    function init() {
+      interceptFetch();
+    }
+    window.RequestTimingPlugin = {
+      init,
+      name: "request-timing"
+    };
+  })();
   function injectCss(css) {
     const style = document.createElement("style");
     style.textContent = css;
@@ -2150,7 +2569,8 @@ ${responseExample}`;
     { id: "favorites", name: "FavoritesPlugin" },
     { id: "search", name: "SearchPlugin" },
     { id: "utils", name: "UtilsPlugin" },
-    { id: "json-validation", name: "JSONValidationPlugin" }
+    { id: "json-validation", name: "JSONValidationPlugin" },
+    { id: "request-timing", name: "RequestTimingPlugin" }
   ];
   function initPlugins() {
     const hasSwagger = !!document.getElementById("swagger-ui");

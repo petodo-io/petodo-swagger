@@ -2,7 +2,7 @@ export function userscriptPlugin() {
   const metadata = `// ==UserScript==
 // @name         Petodo Swagger Plugins
 // @namespace    https://github.com/petodo-io
-// @version      0.1.0
+// @version      0.1.1
 // @description  Plugins for improving Swagger UI: copy compact format, favorites endpoints, search
 // @author       Petodo
 // @match        *://*/*

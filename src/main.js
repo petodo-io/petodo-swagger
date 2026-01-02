@@ -24,6 +24,7 @@ import "./plugins/favorites-plugin.js";
 import "./plugins/search-plugin.js";
 import "./plugins/utils-plugin.js";
 import "./plugins/json-validation-plugin.js";
+import "./plugins/request-timing-plugin.js";
 
 // List of plugins for initialization
 const PLUGINS = [
@@ -32,6 +33,7 @@ const PLUGINS = [
   { id: "search", name: "SearchPlugin" },
   { id: "utils", name: "UtilsPlugin" },
   { id: "json-validation", name: "JSONValidationPlugin" },
+  { id: "request-timing", name: "RequestTimingPlugin" },
 ];
 
 /**
